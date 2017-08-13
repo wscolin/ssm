@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+        <!--spring的配置文件 这里主要配置和业务有关的-->
+
+    <context:component-scan base-package="com.colin.crud" >
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"></context:exclude-filter>
+    </context:component-scan>
+    <!--配置数据源，事务等-->
+    <context:property-placeholder location="classpath:dbConfig.properties"/>
+    <bean id="pooledDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="jdbcUrl" value="${jdbc.jdbcUrl}"></property>
+        <property name="driverClass" value="${jdbc.driverClass}"></property>
+        <property name="user" value="${jdbc.user}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+    </bean>
+    <bean id= "sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" >
+        <!--mybatis 全局配置-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        
+        <property name="dataSource" ref="pooledDataSource"/>
+        <!--配置mapper配置文件-->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+    </bean>
+    <!--扫描mybatis接口加入IOC容器-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--扫描dao到IOC容器-->
+        <property name="basePackage" value="com.colin.crud.dao"></property>
+    </bean>
+    <!--事务控制-->
+    <bean id ="trnsactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+            <property name="dataSource" ref="pooledDataSource"></property>
+
+    </bean>
+    <!--aop事务控制-->
+    <aop:config>
+        <aop:pointcut expression="execution(* com.colin.crud.service..*(..))" id="txtPoint"></aop:pointcut>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="txtPoint"/>
+    </aop:config>
+    <tx:advice id="txAdvice">
+            <tx:attributes>
+                <tx:method name="*"/>
+                <tx:method name="get" read-only="true"/>
+            </tx:attributes>
+    </tx:advice>
+</beans>
