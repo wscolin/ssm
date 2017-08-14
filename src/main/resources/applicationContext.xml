@@ -21,7 +21,8 @@
         <property name="user" value="${jdbc.user}"></property>
         <property name="password" value="${jdbc.password}"></property>
     </bean>
-    <bean id= "sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" >
+
+    <bean id = "sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" >
         <!--mybatis 全局配置-->
         <property name="configLocation" value="classpath:mybatis-config.xml"/>
         
@@ -34,8 +35,13 @@
         <!--扫描dao到IOC容器-->
         <property name="basePackage" value="com.colin.crud.dao"></property>
     </bean>
+    <!--配置执行批量的sqlsession-->
+    <bean id = "sqlSession" class="org.mybatis.spring.SqlSessionTemplate" >
+        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
+        <constructor-arg name="executorType"  value="BATCH"/>
+    </bean>
     <!--事务控制-->
-    <bean id ="trnsactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <bean id ="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
             <property name="dataSource" ref="pooledDataSource"></property>
 
     </bean>

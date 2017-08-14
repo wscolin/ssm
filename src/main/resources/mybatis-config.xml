@@ -10,4 +10,9 @@
     <typeAliases >
         <package name="com.colin.crud.bean"/>
     </typeAliases>
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+           <!-- <property name="param1" value="value1"/>-->
+        </plugin>
+    </plugins>
 </configuration>

@@ -24,6 +24,18 @@ public class Employee {
         return empId;
     }
 
+
+    public Employee(Integer empId, String empName, String gender, String email, Integer deptId) {
+        this.empId = empId;
+        this.empName = empName;
+        this.gender = gender;
+        this.email = email;
+        this.deptId = deptId;
+    }
+
+    public Employee() {
+    }
+
     public void setEmpId(Integer empId) {
         this.empId = empId;
     }
