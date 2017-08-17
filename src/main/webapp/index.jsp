@@ -1,7 +1,7 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<jsp:forward page="/emps"></jsp:forward>
+<%--<jsp:forward page="/emps"></jsp:forward>--%>
 <%--<head>
     <title>Title</title>
     <link href="static/bootstrap-3.3.7-dist/css/bootstrap.css" rel="stylesheet">
@@ -11,4 +11,5 @@
 <body>
     <button class="btn btn-warning " >确定</button>
 </body>--%>
+
 </html>
